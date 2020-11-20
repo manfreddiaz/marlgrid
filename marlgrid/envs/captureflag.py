@@ -20,6 +20,16 @@ RESPAWN_TIME = 8
 
 class CTFAgentInterface(GridAgentInterface):
 
+    class actions(IntEnum):
+        left = 0  # Rotate left
+        right = 1  # Rotate right
+        forward = 2  # Move forward
+        pickup = 3  # Pick up an object
+        drop = 4  # Drop an object
+        toggle = 5  # Toggle/activate an object
+        build = 6  # build
+        done = 7  # Done completing task
+
     def render(self, img):
         if self.active:
             tri_fn = point_in_triangle((0.12, 0.19), (0.87, 0.50), (0.12, 0.81), )
@@ -47,6 +57,8 @@ class CTFAgentInterface(GridAgentInterface):
 
         return tile
 
+    def can_build(self):
+        return True  # TODO: implement bag of tools
 
 
 class TeamBase(WorldObj):
@@ -287,6 +299,9 @@ class CapturingFlagEnv(MultiGridEnv):
         elif action == agent.actions.done:
             pass
 
+        elif action == agent.actions.build:
+            if not fwd_cell and agent.can_build():
+                self.try_place_obj(Wall(color=agent.color), fwd_pos)
         else:
             raise ValueError(f"Environment can't handle action {action}.")
 

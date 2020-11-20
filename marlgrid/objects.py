@@ -161,6 +161,7 @@ class BulkObj(WorldObj, metaclass=RegisteredObjectType):
     def __eq__(self, other):
         return hash(self) == hash(other)
 
+
 class BonusTile(WorldObj):
     def __init__(self, reward, penalty=-0.1, bonus_id=0, n_bonus=1, initial_reward=True, reset_on_mistake=False, color='yellow', *args, **kwargs):
         super().__init__(*args, **{'color': color, **kwargs, 'state': bonus_id})
